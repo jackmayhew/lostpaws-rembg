@@ -1,3 +1,6 @@
+import os
+os.environ['U2NET_HOME'] = '/opt/models/'
+
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import Response
 from rembg import remove
@@ -11,18 +14,6 @@ app = FastAPI()
 @app.get("/")
 async def root():
     return {"message": "I'm alive"}
-
-@app.on_event("startup")
-async def startup_event():
-    logger.info("Starting up and initializing rembg...")
-    try:
-        # Try to initialize rembg with tiny test data
-        test_data = b"test"
-        remove(test_data)
-        logger.info("rembg initialized successfully!")
-    except Exception as e:
-        logger.error(f"Failed to initialize rembg: {str(e)}")
-        raise
 
 @app.post("/remove-bg")
 async def remove_background(file: UploadFile):
