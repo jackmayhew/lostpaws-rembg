@@ -17,3 +17,7 @@ async def remove_background(file: UploadFile):
     input_image = await file.read()
     output_image = remove(input_image)
     return Response(output_image, media_type="image/png")
+
+@app.get("/health")
+def health_check():
+    return {"status": "ok"}
