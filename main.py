@@ -1,5 +1,10 @@
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import Response
+from rembg import remove
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 app = FastAPI()
 
@@ -7,8 +12,27 @@ app = FastAPI()
 async def root():
     return {"message": "I'm alive"}
 
+@app.on_event("startup")
+async def startup_event():
+    logger.info("Starting up and initializing rembg...")
+    try:
+        # Try to initialize rembg with tiny test data
+        test_data = b"test"
+        remove(test_data)
+        logger.info("rembg initialized successfully!")
+    except Exception as e:
+        logger.error(f"Failed to initialize rembg: {str(e)}")
+        raise
+
 @app.post("/remove-bg")
 async def remove_background(file: UploadFile):
-    input_image = await file.read()
-    # Just return the image without processing for now
-    return Response(input_image, media_type="image/png")
+    logger.info("Got image upload request")
+    try:
+        input_image = await file.read()
+        logger.info("Read image file")
+        output_image = remove(input_image)
+        logger.info("Successfully removed background")
+        return Response(output_image, media_type="image/png")
+    except Exception as e:
+        logger.error(f"Error in remove_background: {str(e)}")
+        raise
