@@ -12,6 +12,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 # @app.post("/remove-bg")
 # async def remove_background(file: UploadFile):
 #     input_image = await file.read()
