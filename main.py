@@ -5,12 +5,12 @@ from fastapi.responses import Response
 
 app = FastAPI()
 
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=["http://localhost:3000", "https://lostpaws.netlify.app/", "*"],
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000", "https://lostpaws.netlify.app/", "*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # @app.post("/remove-bg")
 # async def remove_background(file: UploadFile):
